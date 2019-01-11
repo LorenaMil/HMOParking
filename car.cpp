@@ -61,3 +61,11 @@ bool allowedLineForCar(int indexLine, Car car){
 	}
 	return false;
 }
+
+int totalCarsLength(vector<Car> cars){
+	int total = 0;
+	for (int i = 0; i < cars.size(); i++){
+		total += cars[i].length;
+	}
+	return total;
+}

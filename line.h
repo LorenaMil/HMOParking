@@ -37,9 +37,21 @@ void printLinesUsage(vector<Line> lines);
 
 int findIndexVector(vector<Line> lines, int indexLine);
 
+int totalLinesLength(vector<Line> lines);
 
+int numDiffTypes(vector<Line> lines);
 
+int numUsedLines(vector<Line> lines);
 
+double unusedCapacity(vector<Line> lines);
+
+int numSameScheduleInLine(vector<Line> lines);
+
+int numSameScheduleLines(vector<Line> lines);
+
+int timeDiff(vector<Line> lines);
+
+int numOfNeighbours(vector<Line> lines);
 
 
 #endif

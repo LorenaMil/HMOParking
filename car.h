@@ -31,6 +31,8 @@ void printCars(vector<Car> cars);
 
 bool allowedLineForCar(int indexLine, Car car);
 
+int totalCarsLength(vector<Car> cars);
+
 
 
 #endif

@@ -149,6 +149,7 @@ void startingInstance(){
 
 	// fill lines
 	int index = 0;
+	int did = 0;
 	Line line;
 	for (int i = 0; i < cars.size(); i++){
 		Car car = cars[i];
@@ -159,21 +160,83 @@ void startingInstance(){
 				line = addCarToLine(line, car);
 				int id = findIndexVector(lines, index);
 				lines.at(id) = line;
+				did++;
 				break;
 			}
 		}
 	}
-	//printLinesUsage(lines);
+	printLinesUsage(lines);
 	printLines(lines);
+	cout << did;
+
+}
+
+//********* FIRST GLOBAL GOAL **************//
+
+// First subgoal
+double firstSubgoalF(vector<Line> lines){
+	int factor = numUsedLines(lines) - 1;
+	int numDiff = numDiffTypes(lines);
+
+	return (double)factor/numDiff;
+}
+
+// Second subgoal
+double secondSubgoalF(vector<Line> lines){
+	int factor = numLines;
+	int numL = numUsedLines(lines);
+
+	return (double) numL/factor;
+}
+
+// Third subgoal
+double thirdSubgoalF(vector<Line> lines){
+	double cap = unusedCapacity(lines);
+	int factor = totalLinesLength(lines) - totalCarsLength(cars);
+
+	return (double)cap/factor;
+}
+
+double firstGoal(vector<Line> lines){
+	return (firstSubgoalF(lines) + secondSubgoalF(lines) + thirdSubgoalF(lines));
+}
 
 
+//************ SECOND GLOBAL GOAL *****************//
+
+// First subgoal
+double firstSubgoalG(vector<Line> lines){
+	int pairs = numSameScheduleInLine(lines);
+	int factor = numCars - numUsedLines(lines);
+
+	return (double)pairs/factor;
+}
+
+// Second subgoal
+double secondSubgoalG(vector<Line> lines){
+	int pairs = numSameScheduleLines(lines);
+	int factor = numUsedLines(lines) - 1;
+
+	return (double)pairs/factor;
+}
+
+// Third subgoal
+double thirdSubgoalG(vector<Line> lines){
+	int time = timeDiff(lines);
+	int factor = 15 * numOfNeighbours(lines);
+
+	return (double)time/factor;
+}
+
+double secondGoal(vector<Line> lines){
+	return (firstSubgoalG(lines) + secondSubgoalG(lines) + thirdSubgoalG(lines));
 }
 
 
 
-/*int main(){
+int main(){
 	readFromFile();
 	startingInstance();
 
 	return 0;
-}*/
+}
