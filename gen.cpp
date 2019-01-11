@@ -171,9 +171,9 @@ void startingInstance(){
 
 
 
-int main(){
+/*int main(){
 	readFromFile();
 	startingInstance();
 
 	return 0;
-}
+}*/
