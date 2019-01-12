@@ -15,6 +15,7 @@ struct Line{
 	int type;
 	vector<Car> cars;
 
+	Line(int index, int length, int type) :index(index), length(length), type(type) {};
 	/*bool operator < (const Line& line) const
     {
         return (index < line.index);

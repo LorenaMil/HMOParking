@@ -1,3 +1,7 @@
+#ifndef GEN
+#define GEN
+
+
 #include <sstream>
 #include <string>
 #include <vector>
@@ -39,8 +43,14 @@ void printBlockList(){
 		cout << '\n';
 	}
 }
+
+
+vector<Block> block_list(){
+	return blockList;
+}
+
 void readFromFile(){
-	ifstream file("instanca1.txt");
+	ifstream file("instanca3.txt");
 	int numLine = 0;
 	if (file.is_open()){
 		string line;
@@ -150,16 +160,16 @@ void startingInstance(){
 	// fill lines
 	int index = 0;
 	int did = 0;
-	Line line;
+	//Line line;
 	for (int i = 0; i < cars.size(); i++){
 		Car car = cars[i];
 		for (int j = 0; j < orderLines.size(); j++){
 			index = orderLines[j];
-			line = getLine(lines, index);
+			auto line = lines[index];
 			if (canAddToLine(line, car)){
 				line = addCarToLine(line, car);
 				int id = findIndexVector(lines, index);
-				lines.at(id) = line;
+				lines[id] = line;
 				did++;
 				break;
 			}
@@ -174,7 +184,7 @@ void startingInstance(){
 //********* FIRST GLOBAL GOAL **************//
 
 // First subgoal
-double firstSubgoalF(vector<Line> lines){
+double firstSubgoalF(const vector<Line> & lines){
 	int factor = numUsedLines(lines) - 1;
 	int numDiff = numDiffTypes(lines);
 
@@ -182,7 +192,7 @@ double firstSubgoalF(vector<Line> lines){
 }
 
 // Second subgoal
-double secondSubgoalF(vector<Line> lines){
+double secondSubgoalF(const vector<Line> & lines){
 	int factor = numLines;
 	int numL = numUsedLines(lines);
 
@@ -190,14 +200,14 @@ double secondSubgoalF(vector<Line> lines){
 }
 
 // Third subgoal
-double thirdSubgoalF(vector<Line> lines){
+double thirdSubgoalF(const vector<Line> & lines){
 	double cap = unusedCapacity(lines);
 	int factor = totalLinesLength(lines) - totalCarsLength(cars);
 
 	return (double)cap/factor;
 }
 
-double firstGoal(vector<Line> lines){
+double firstGoal(const vector<Line> & lines){
 	return (firstSubgoalF(lines) + secondSubgoalF(lines) + thirdSubgoalF(lines));
 }
 
@@ -205,7 +215,7 @@ double firstGoal(vector<Line> lines){
 //************ SECOND GLOBAL GOAL *****************//
 
 // First subgoal
-double firstSubgoalG(vector<Line> lines){
+double firstSubgoalG(const vector<Line> & lines){
 	int pairs = numSameScheduleInLine(lines);
 	int factor = numCars - numUsedLines(lines);
 
@@ -213,7 +223,7 @@ double firstSubgoalG(vector<Line> lines){
 }
 
 // Second subgoal
-double secondSubgoalG(vector<Line> lines){
+double secondSubgoalG(const vector<Line> & lines){
 	int pairs = numSameScheduleLines(lines);
 	int factor = numUsedLines(lines) - 1;
 
@@ -221,14 +231,14 @@ double secondSubgoalG(vector<Line> lines){
 }
 
 // Third subgoal
-double thirdSubgoalG(vector<Line> lines){
+double thirdSubgoalG(const vector<Line> & lines){
 	int time = timeDiff(lines);
 	int factor = 15 * numOfNeighbours(lines);
 
 	return (double)time/factor;
 }
 
-double secondGoal(vector<Line> lines){
+double secondGoal(const vector<Line> & lines){
 	return (firstSubgoalG(lines) + secondSubgoalG(lines) + thirdSubgoalG(lines));
 }
 
@@ -240,3 +250,4 @@ int main(){
 
 	return 0;
 }
+#endif // !1

@@ -17,10 +17,7 @@ struct Line{
 vector<Line> createLines(int numlines, int length[]){
 	vector<Line> lines;
 	for (int i = 0; i < numlines; i++){
-		Line line;
-		line.index = i+1;
-		line.length = length[i];
-		line.type = 0;
+		Line line = Line(i, length[i], 0);
 
 		lines.push_back(line);
 	}

@@ -1,7 +1,8 @@
-#include "GeneticAlgorithm.h"
-#include "Chromosom.h"
-#include <chrono>
-int main() {
+
+//#include "Chromosom.h"
+//#include "GeneticAlgorithm.h"
+//#include <chrono>
+/*int main() {
 
 
 
@@ -41,4 +42,4 @@ int main() {
 	}
 
 	return 0;
-}
+}*/

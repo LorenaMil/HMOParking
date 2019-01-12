@@ -4,6 +4,7 @@
 #include <algorithm>
 #include "Chromosom.h"
 #include <random>
+#include <time.h>
 
 class GeneticAlgorithm {
 	
@@ -26,7 +27,7 @@ class GeneticAlgorithm {
 		Chromosom evaluate() {
 		
 			std::sort(population.begin(), population.end());
-			population[0];
+			return population[0];
 		
 		}
 
@@ -61,8 +62,8 @@ class GeneticAlgorithm {
 					toRemove = tournament[i];
 				}
 			}
-			tournament.erase(std::remove(tournament.begin(), tournament.end(), toRemove), tournament.end);
-			population.erase(std::remove(population.begin(), population.end(), toRemove), population.end);
+			tournament.erase(std::remove(tournament.begin(), tournament.end(), toRemove), tournament.end());
+			population.erase(std::remove(population.begin(), population.end(), toRemove), population.end());
 			auto parent1 = tournament[0];
 			auto parent2 = tournament[1];
 			auto child = Chromosom::GetChild(parent1,parent2);
