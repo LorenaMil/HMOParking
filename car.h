@@ -33,6 +33,10 @@ bool allowedLineForCar(int indexLine, Car car);
 
 int totalCarsLength(vector<Car> cars);
 
+void printCarWithID(vector<Car> cars, int id);
+
+int carsWithType(vector<Car> cars, int type);
+
 
 
 #endif

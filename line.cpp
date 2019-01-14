@@ -14,10 +14,19 @@ struct Line{
 	vector<Car> cars;
 };*/
 
-vector<Line> createLines(int numlines, int length[]){
+vector<Line> createLines(int numlines, int length[], vector<Car> cars){
 	vector<Line> lines;
 	for (int i = 0; i < numlines; i++){
-		Line line = Line(i, length[i], 0);
+		Line line;
+		line.index = i+1;
+		line.length = length[i];
+		line.type = 0;
+		line.allowedCars = 0;
+
+		for (int j = 0; j < cars.size(); j++){
+			if (allowedLineForCar(line.index, cars[j]))
+				line.allowedCars++;
+		}
 
 		lines.push_back(line);
 	}
@@ -60,6 +69,20 @@ Line getLine(vector<Line> lines, int index){
 void printLines(vector<Line> lines){
 	for (int i = 0; i < lines.size(); i++){
 		cout << lines[i].index << ":\t";
+		for (int j = 0; j < lines[i].cars.size(); j++){
+			cout << lines[i].cars[j].index << " ";
+		}
+		cout << "\n";
+	}
+}
+
+void printLinesAll(vector<Line> lines){
+	for (int i = 0; i < lines.size(); i++){
+		cout << lines[i].index << ":\t";
+		cout << "Length: " << lines[i].length << ":\t";
+		cout << "Used: " << usedLength(lines[i]) << ":\t";
+		cout << "Type: " << lines[i].type << ":\t";
+		cout << "Allow: " << lines[i].allowedCars << ":\t";
 		for (int j = 0; j < lines[i].cars.size(); j++){
 			cout << lines[i].cars[j].index << " ";
 		}
@@ -185,6 +208,27 @@ int numOfNeighbours(vector<Line> lines){
 	for (int i = 0; i < lines.size(); i++){
 		if (lines[i].cars.size() < 2) break;
 		count += lines[i].cars.size()-1;
+	}
+	return count;
+}
+
+vector<Line> sortLinesByNum(vector<Line> lines){
+	sort(lines.begin(), lines.end());
+	return lines;
+}
+
+bool lineHasCarWithID(Line line, int id){
+	for (int i = 0; i < line.cars.size(); i++){
+		if (line.cars[i].index == id) 
+			return true;
+	}
+	return false;
+}
+
+int linesWithType(vector<Line> lines, int type){
+	int count = 0;
+	for (int i = 0; i < lines.size(); i++){
+		if (lines[i].type == type) count++;
 	}
 	return count;
 }

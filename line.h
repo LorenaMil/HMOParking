@@ -13,16 +13,16 @@ struct Line{
 	int index;
 	int length;
 	int type;
+	int allowedCars; // how much cars are allowed to be put here
 	vector<Car> cars;
 
-	Line(int index, int length, int type) :index(index), length(length), type(type) {};
-	/*bool operator < (const Line& line) const
+	bool operator < (const Line& line) const
     {
-        return (index < line.index);
-    }*/
+        return (allowedCars < line.allowedCars);
+    }
 };
 
-vector<Line> createLines(int numlines, int length[]);
+vector<Line> createLines(int numlines, int length[], vector<Car> cars);
 
 double usedLength(Line line);
 
@@ -33,6 +33,8 @@ Line addCarToLine(Line line, Car car);
 Line getLine(vector<Line> lines, int index);
 
 void printLines(vector<Line> lines);
+
+void printLinesAll(vector<Line> lines);
 
 void printLinesUsage(vector<Line> lines);
 
@@ -54,5 +56,10 @@ int timeDiff(vector<Line> lines);
 
 int numOfNeighbours(vector<Line> lines);
 
+vector<Line> sortLinesByNum(vector<Line> lines);
+
+bool lineHasCarWithID(Line line, int id);
+
+int linesWithType(vector<Line> lines, int type);
 
 #endif

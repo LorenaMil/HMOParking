@@ -45,7 +45,7 @@ vector<Car> sortCarsByTime(vector<Car> cars){
 
 void printCars(vector<Car> cars){
 	for (int i = 0; i < cars.size(); i++){
-		cout << cars[i].index << " " << cars[i].time << " " << cars[i].length << "Lines: ";
+		cout << cars[i].index << " " << cars[i].type << " " << cars[i].time << " " << cars[i].length << "Lines: ";
 		for(int j = 0; j < cars[i].allowedLines.size(); j++){
 			cout << cars[i].allowedLines[j] << " ";
 		}
@@ -68,4 +68,24 @@ int totalCarsLength(vector<Car> cars){
 		total += cars[i].length;
 	}
 	return total;
+}
+
+void printCarWithID(vector<Car> cars, int id){
+	for (int i = 0; i < cars.size(); i++){
+		if (cars[i].index == id){
+			cout << "CAR: " << id << "\n";
+			cout << "Length: " << cars[i].length << "\n";
+			cout << "Type: " << cars[i].type << "\n";
+			cout << "Time: " << cars[i].time << "\n";
+			cout << "Schedule: " << cars[i].schedule << "\n\n";
+		}
+	}
+}
+
+int carsWithType(vector<Car> cars, int type){
+	int count = 0;
+	for (int i = 0; i < cars.size(); i++){
+		if (cars[i].type == type) count++;
+	}
+	return count;
 }
