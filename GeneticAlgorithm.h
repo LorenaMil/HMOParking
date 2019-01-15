@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include <iostream>
 #include <algorithm>
+#include <random>
 #include "Chromosom.h"
 #include <random>
 #include <time.h>

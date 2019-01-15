@@ -1,9 +1,9 @@
 #ifndef CHROMOSOM
 #define CHROMOSOM
-#include "car.h";
-#include "line.h";
+#include "car.h"
 #include<time.h>
 #include <vector>
+#include <random>
 #include "goal_function.h"
 class Chromosom {
 

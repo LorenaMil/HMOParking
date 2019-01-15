@@ -1,7 +1,6 @@
 #ifndef goalf
 #define goalf
 
-
 #include "line.h"
 
 namespace goal {
