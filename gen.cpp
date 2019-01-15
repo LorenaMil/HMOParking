@@ -459,7 +459,7 @@ int schedule[100];
 		//printCars(unsetCars);
 		//cout << "\n";
 
-		printLinesAll(lines);
+		//printLinesAll(lines);
 		//cout << "\n";
 		//cout << done << "\n";
 
@@ -495,20 +495,23 @@ int schedule[100];
 		bool condition = false;
 		while (true) {
 			ga.next_gen();
-			//cout << cunt<<"\n";
+			cout << cunt<<"\n";
 			//cout << std::chrono::duration_cast<std::chrono::minutes>(start - std::chrono::high_resolution_clock::now()).count() << "\n";
 			cunt++;
 			if (std::chrono::duration_cast<std::chrono::minutes>(start - std::chrono::high_resolution_clock::now()).count() <= -1 && first == false) {
 
 				first = true;
 				auto best = ga.evaluate();
+				cout << "1min\n";
 				printLinesGoodFormat(best.chromosom_representation);
+				return 0;
 				///write best to file res-1m-instancenumber
 			}
 			else if (std::chrono::duration_cast<std::chrono::minutes>(start - std::chrono::high_resolution_clock::now()).count() <= -5 && second == false) {
 
 				second = true;
 				auto best = ga.evaluate();
+				cout << "5min\n";
 				printLinesGoodFormat(best.chromosom_representation);
 				return 0;
 				///write best to file res-5m-instancenumber
@@ -516,6 +519,7 @@ int schedule[100];
 			else if (third == false && condition) {
 				third = true;
 				auto best = ga.evaluate();
+
 				printLinesGoodFormat(best.chromosom_representation);
 				///write best to file res-n-instancenumber
 				break;

@@ -5,6 +5,7 @@
 #include <vector>
 #include <stdlib.h>
 #include <iostream>
+#include <unordered_map>
 
 using namespace std;
 
@@ -15,7 +16,7 @@ struct Car{
 	int time;
 	int schedule;
 
-	vector<int> allowedLines;
+	unordered_map<int,bool> allowedLines;
 
 	bool operator < (const Car& car) const
     {

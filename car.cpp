@@ -30,7 +30,10 @@ vector<Car> createCars(int numcars, int length[], int type[], int tripTime[], in
 
 		for (int j = 0; j < numlines; j++){
 			if (limit[i][j] == 1)
-				car.allowedLines.push_back(j+1);
+				car.allowedLines[j+1]=true;
+			else {
+				car.allowedLines[j + 1] = false;
+			}
 		}
 
 		cars.push_back(car);
@@ -55,12 +58,7 @@ void printCars(vector<Car> cars){
 }
 
 bool allowedLineForCar(int indexLine, Car car){
-	for (int i = 0; i < car.allowedLines.size(); i++){
-		if (car.allowedLines[i] == indexLine){
-			return true;
-		}
-	}
-	return false;
+	return car.allowedLines[indexLine];
 }
 
 int totalCarsLength(vector<Car> cars){

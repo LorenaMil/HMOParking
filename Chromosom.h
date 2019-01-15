@@ -16,26 +16,36 @@ class Chromosom {
 
 			///select random line
 			auto line_index = std::rand() % chromosom_representation.size();
-			auto & line = chromosom_representation[line_index];
+			auto line = chromosom_representation[line_index];
 			///select random car
 			while (line.cars.size() == 0) {
 				line_index = std::rand() % chromosom_representation.size();
 				line = chromosom_representation[line_index];
 			}
+			auto & trueLine = chromosom_representation[line_index];
 			auto index1 = std::rand() % line.cars.size();
-			auto car = line.cars[index1];
+			auto car = trueLine.cars[index1];
 
 			///select line of same type but not the same line
 			auto line_index2 = std::rand()%chromosom_representation.size();
-			auto & line2=chromosom_representation[line_index2];
-			while (line2.type != line.type || line2.cars.size()==0) {
-				line_index2 = std::rand()%chromosom_representation.size();
-				line2 = chromosom_representation[line_index2];
-			}
-			///select car from line 2
-			auto index2 = std::rand() % line2.cars.size();
-			auto car2 = line2.cars[std::rand() % line2.cars.size()];
+			auto line2=chromosom_representation[line_index2];
+			unsigned int index2;
+			Car car2;
+			int count = 0;
+			//try to find car and line that is allowed for car1 and line1
+			do {
+				count++;
+				while (line2.type != line.type || line2.cars.size() == 0 || line_index2 == line_index) {
+					line_index2 = std::rand() % chromosom_representation.size();
+					line2 = chromosom_representation[line_index2];
+				}
 
+				///select car from line 2
+				index2 = std::rand() % line2.cars.size();
+				car2 = std::move(line2.cars[index2]);
+
+			} while (!allowedLineForCar(line.index, car2)||!allowedLineForCar(line2.index,car));
+			auto & trueLine2 = chromosom_representation[line_index2];
 			///check cond 8
 			/*auto block = block_list();
 			bool cond8 = false;
@@ -64,13 +74,13 @@ class Chromosom {
 				}
 			}*/
 			///swap them
-			line.cars[index1] = car2;
-			line2.cars[index2] = car;
+			trueLine.cars[index1] = car2;
+			trueLine2.cars[index2] = car;
 
 
 			///sort cars
-			line.cars = sortCarsByTime(line.cars);
-			line2.cars = sortCarsByTime(line2.cars);
+			trueLine.cars = sortCarsByTime(trueLine.cars);
+			trueLine2.cars = sortCarsByTime(trueLine2.cars);
 			evaluation();
 		}
 		static Chromosom GetChild(const Chromosom & c1, const Chromosom & c2) {
