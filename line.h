@@ -36,6 +36,8 @@ void printLines(vector<Line> lines);
 
 void printLinesAll(vector<Line> lines);
 
+void printLinesGoodFormat(vector<Line> lines);
+
 void printLinesUsage(vector<Line> lines);
 
 int findIndexVector(vector<Line> lines, int indexLine);

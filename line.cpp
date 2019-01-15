@@ -90,6 +90,15 @@ void printLinesAll(vector<Line> lines){
 	}
 }
 
+void printLinesGoodFormat(vector<Line> lines){
+	for (int i = 0; i < lines.size(); i++){
+		for (int j = 0; j < lines[i].cars.size(); j++){
+			cout << lines[i].cars[j].index << " ";
+		}
+		cout << "\n";
+	}
+}
+
 void printLinesUsage(vector<Line> lines){
 	for (int i = 0; i < lines.size(); i++){
 		cout << lines[i].index << "\t" << lines[i].length << " ";
