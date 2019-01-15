@@ -18,7 +18,8 @@ class GeneticAlgorithm {
 
 		void initialize(const Chromosom & c) {
 			population.reserve(populationSize);
-			while (population.size() < populationSize) {
+			population.push_back(c);
+			while (population.size() < populationSize-1) {
 				auto c2 = Chromosom::Random(c);
 				c2.evaluation();
 				population.push_back(c2);

@@ -30,7 +30,7 @@ vector<Car> sortCarsByTime(vector<Car> cars);
 
 void printCars(vector<Car> cars);
 
-bool allowedLineForCar(int indexLine, Car car);
+bool allowedLineForCar(int indexLine, const Car & car);
 
 int totalCarsLength(vector<Car> cars);
 

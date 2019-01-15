@@ -57,8 +57,11 @@ void printCars(vector<Car> cars){
 	}
 }
 
-bool allowedLineForCar(int indexLine, Car car){
-	return car.allowedLines[indexLine];
+bool allowedLineForCar(int indexLine, const Car & car){
+	if (car.allowedLines.count(indexLine)>0) {
+		return car.allowedLines.at(indexLine);
+	}
+	return false;
 }
 
 int totalCarsLength(vector<Car> cars){

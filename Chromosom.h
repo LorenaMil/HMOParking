@@ -24,27 +24,33 @@ class Chromosom {
 			}
 			auto & trueLine = chromosom_representation[line_index];
 			auto index1 = std::rand() % line.cars.size();
-			auto car = trueLine.cars[index1];
+			auto car = std::move(trueLine.cars[index1]);
 
 			///select line of same type but not the same line
 			auto line_index2 = std::rand()%chromosom_representation.size();
 			auto line2=chromosom_representation[line_index2];
 			unsigned int index2;
-			Car car2;
+
 			int count = 0;
-			//try to find car and line that is allowed for car1 and line1
-			do {
-				count++;
-				while (line2.type != line.type || line2.cars.size() == 0 || line_index2 == line_index) {
-					line_index2 = std::rand() % chromosom_representation.size();
-					line2 = chromosom_representation[line_index2];
+			std::vector<int> indicesOfAllowed;
+			for (auto line : car.allowedLines) {
+				if (line.second) {
+					indicesOfAllowed.push_back(line.first);
 				}
+			}
+			//try to find car and line that is allowed for car1 and line1
+			//do {
+			count++;
+			while (line2.type != line.type || line2.cars.size() == 0 || line_index2 == line_index) {
+				line_index2 = std::rand() % chromosom_representation.size();
+				line2 = chromosom_representation[line_index2];
+			}
 
-				///select car from line 2
-				index2 = std::rand() % line2.cars.size();
-				car2 = std::move(line2.cars[index2]);
+			///select car from line 2
+			index2 = std::rand() % line2.cars.size();
+			auto car2 = std::move(line2.cars[index2]);
 
-			} while (!allowedLineForCar(line.index, car2)||!allowedLineForCar(line2.index,car));
+			//} while (!allowedLineForCar(line.index, car2)/*||!allowedLineForCar(line2.index,car)*/);
 			auto & trueLine2 = chromosom_representation[line_index2];
 			///check cond 8
 			/*auto block = block_list();
@@ -73,9 +79,11 @@ class Chromosom {
 
 				}
 			}*/
-			///swap them
-			trueLine.cars[index1] = car2;
-			trueLine2.cars[index2] = car;
+			///swap them if possible
+			if (allowedLineForCar(trueLine.index, car2) && allowedLineForCar(trueLine2.index, car)) {
+				trueLine.cars[index1] = car2;
+				trueLine2.cars[index2] = car;
+			}
 
 
 			///sort cars
