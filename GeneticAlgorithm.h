@@ -54,25 +54,30 @@ class GeneticAlgorithm {
 			auto tournament = std::vector<Chromosom>();
 			tournament.reserve(3);
 			srand(time(0));
+			std::vector<int> indices = { 0,0,0 };
 			for (int i = 0;i < 3;i++) {
-				tournament.push_back(population[rand()%populationSize]);
+				indices[i] = rand() % population.size();
+				tournament.push_back(population[indices[i]]);
 			}
 			
 			auto toRemove = tournament[0];
+			auto index = 0;
 			//finding element to remove
 			for (int i = 1;i < 3;i++) {
 				if (tournament[i] < toRemove) {
 					toRemove = tournament[i];
+					index = i;
 				}
 			}
-			tournament.erase(std::remove(tournament.begin(), tournament.end(), toRemove), tournament.end());
-			population.erase(std::remove(population.begin(), population.end(), toRemove), population.end());
+			tournament.erase(tournament.begin()+index);
+			population.erase(population.begin()+indices[index]);
 			auto parent1 = tournament[0];
 			auto parent2 = tournament[1];
 			auto child = Chromosom::GetChild(parent1,parent2);
 			if (rand() % 100 < mutationProbability * 100) {
 				child.mutate();
 			}
+			child.evaluation();
 			population.push_back(child);
 		
 		

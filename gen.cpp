@@ -488,29 +488,35 @@ int schedule[100];
 		auto ga = GeneticAlgorithm(elitism, population_size, mutation_probability);
 		auto c = Chromosom();
 		c.chromosom_representation = lines;
+		c.evaluation();
 		ga.initialize(c);
+		int cunt = 0;
 		auto start = std::chrono::high_resolution_clock::now();
 		bool condition = false;
 		while (true) {
 			ga.next_gen();
-			if (std::chrono::duration_cast<std::chrono::minutes>(start - std::chrono::high_resolution_clock::now()).count() > 1 && first == false) {
+			//cout << cunt<<"\n";
+			//cout << std::chrono::duration_cast<std::chrono::minutes>(start - std::chrono::high_resolution_clock::now()).count() << "\n";
+			cunt++;
+			if (std::chrono::duration_cast<std::chrono::minutes>(start - std::chrono::high_resolution_clock::now()).count() <= -1 && first == false) {
 
 				first = true;
 				auto best = ga.evaluate();
-				cout << best.fitness;
+				printLinesGoodFormat(best.chromosom_representation);
 				///write best to file res-1m-instancenumber
 			}
-			else if (std::chrono::duration_cast<std::chrono::minutes>(start - std::chrono::high_resolution_clock::now()).count() > 5 && second == false) {
+			else if (std::chrono::duration_cast<std::chrono::minutes>(start - std::chrono::high_resolution_clock::now()).count() <= -5 && second == false) {
 
 				second = true;
 				auto best = ga.evaluate();
-				cout << best.fitness;
+				printLinesGoodFormat(best.chromosom_representation);
+				return 0;
 				///write best to file res-5m-instancenumber
 			}
 			else if (third == false && condition) {
 				third = true;
 				auto best = ga.evaluate();
-				cout << best.fitness;
+				printLinesGoodFormat(best.chromosom_representation);
 				///write best to file res-n-instancenumber
 				break;
 

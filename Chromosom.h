@@ -2,6 +2,7 @@
 #define CHROMOSOM
 #include "car.h";
 #include "line.h";
+#include<time.h>
 #include <vector>
 #include "goal_function.h"
 class Chromosom {
@@ -12,27 +13,28 @@ class Chromosom {
 		double fitness;
 		
 		void mutate() {
+
 			///select random line
-			auto line_index = rand() % chromosom_representation.size()+1;
-			auto line = chromosom_representation[line_index];
+			auto line_index = std::rand() % chromosom_representation.size();
+			auto & line = chromosom_representation[line_index];
 			///select random car
 			while (line.cars.size() == 0) {
-				auto line_index = rand() % chromosom_representation.size()+1;
-				auto line = chromosom_representation[line_index];
+				line_index = std::rand() % chromosom_representation.size();
+				line = chromosom_representation[line_index];
 			}
-			auto index1 = rand() % line.cars.size();
+			auto index1 = std::rand() % line.cars.size();
 			auto car = line.cars[index1];
 
 			///select line of same type but not the same line
-			auto line_index2 = rand()&chromosom_representation.size()+1;
-			auto line2=chromosom_representation[line_index2];
+			auto line_index2 = std::rand()%chromosom_representation.size();
+			auto & line2=chromosom_representation[line_index2];
 			while (line2.type != line.type || line2.cars.size()==0) {
-				line_index2 = rand()&chromosom_representation.size()+1;
+				line_index2 = std::rand()%chromosom_representation.size();
 				line2 = chromosom_representation[line_index2];
 			}
 			///select car from line 2
-			auto index2 = rand() % line2.cars.size();
-			auto car2 = line2.cars[rand() % line2.cars.size()];
+			auto index2 = std::rand() % line2.cars.size();
+			auto car2 = line2.cars[std::rand() % line2.cars.size()];
 
 			///check cond 8
 			/*auto block = block_list();

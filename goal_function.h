@@ -44,8 +44,8 @@ namespace goal {
 	double firstSubgoalG(const vector<Line> & lines) {
 		int pairs = numSameScheduleInLine(lines);
 		int factor = carCount - numUsedLines(lines);
-
-		return (double)pairs / factor;
+		auto result = (double)pairs / factor;
+		return result;
 	}
 
 	// Second subgoal
@@ -53,19 +53,22 @@ namespace goal {
 		int pairs = numSameScheduleLines(lines);
 		int factor = numUsedLines(lines) - 1;
 
-		return (double)pairs / factor;
+		return ((double)pairs) / factor;
 	}
 
 	// Third subgoal
 	double thirdSubgoalG(const vector<Line> & lines) {
 		int time = timeDiff(lines);
 		int factor = 15 * numOfNeighbours(lines);
-
-		return (double)time / factor;
+		if (time == 0) { return 0; }
+		return ((double)time) / factor;
 	}
 
 	double secondGoal(const vector<Line> & lines) {
-		return (firstSubgoalG(lines) + secondSubgoalG(lines) + thirdSubgoalG(lines));
+		auto fsg = firstSubgoalG(lines);
+		auto ssg = secondSubgoalG(lines);
+		auto tsg = thirdSubgoalG(lines);
+		return ( fsg+ ssg + tsg);
 	}
 
 
@@ -75,5 +78,8 @@ namespace goal {
 		}
 		carCount = cars.size();
 	}
+
+
+
 }
 #endif // !goalf
