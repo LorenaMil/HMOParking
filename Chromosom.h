@@ -3,7 +3,7 @@
 #include "car.h";
 #include "line.h";
 #include <vector>
-#include "gen.cpp"
+#include "goal_function.h"
 class Chromosom {
 
 
@@ -13,17 +13,21 @@ class Chromosom {
 		
 		void mutate() {
 			///select random line
-			auto line_index = rand() % chromosom_representation.size();
+			auto line_index = rand() % chromosom_representation.size()+1;
 			auto line = chromosom_representation[line_index];
 			///select random car
+			while (line.cars.size() == 0) {
+				auto line_index = rand() % chromosom_representation.size()+1;
+				auto line = chromosom_representation[line_index];
+			}
 			auto index1 = rand() % line.cars.size();
 			auto car = line.cars[index1];
 
 			///select line of same type but not the same line
-			auto line_index2 = rand()&chromosom_representation.size();
+			auto line_index2 = rand()&chromosom_representation.size()+1;
 			auto line2=chromosom_representation[line_index2];
-			while (line2.type != line.type) {
-				line_index2 = rand()&chromosom_representation.size();
+			while (line2.type != line.type || line2.cars.size()==0) {
+				line_index2 = rand()&chromosom_representation.size()+1;
 				line2 = chromosom_representation[line_index2];
 			}
 			///select car from line 2
@@ -31,7 +35,7 @@ class Chromosom {
 			auto car2 = line2.cars[rand() % line2.cars.size()];
 
 			///check cond 8
-			auto block = block_list();
+			/*auto block = block_list();
 			bool cond8 = false;
 			///todo check cond 8
 			for (auto blocking : block) {
@@ -56,7 +60,7 @@ class Chromosom {
 					
 
 				}
-			}
+			}*/
 			///swap them
 			line.cars[index1] = car2;
 			line2.cars[index2] = car;
@@ -67,11 +71,25 @@ class Chromosom {
 			line2.cars = sortCarsByTime(line2.cars);
 			evaluation();
 		}
-		static Chromosom GetChild(const Chromosom &, const Chromosom &);
-		static Chromosom Random();
+		static Chromosom GetChild(const Chromosom & c1, const Chromosom & c2) {
+			auto a = c1;
+			auto b = c2;
+			a.mutate();
+			b.mutate();
+			if (a.fitness < b.fitness) {
+				return b;
+			}
+			return a;
+		}
+		static Chromosom Random(Chromosom c) {
+			c.mutate();
+			return c;
+		}
 		
 		double evaluation() {
-			fitness = secondGoal(chromosom_representation) / (firstGoal(chromosom_representation) + .0001);
+			auto sg=goal::secondGoal(chromosom_representation);
+			auto fg = goal::firstGoal(chromosom_representation);
+			fitness = sg / ( fg + .0001);
 			return fitness;
 		}
 

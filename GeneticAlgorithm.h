@@ -16,11 +16,14 @@ class GeneticAlgorithm {
 		std::vector<Chromosom> population;
 		
 
-		void initialize() {
-		
+		void initialize(const Chromosom & c) {
+			population.reserve(populationSize);
 			while (population.size() < populationSize) {
-				population.push_back(Chromosom::Random());
+				auto c2 = Chromosom::Random(c);
+				c2.evaluation();
+				population.push_back(c2);
 			}
+			set_fitness_sum();
 
 		}
 
@@ -45,7 +48,7 @@ class GeneticAlgorithm {
 	private:
 
 
-		void next_gen_generational();
+		void next_gen_generational() {};
 
 		void next_generation_elimination() {
 			auto tournament = std::vector<Chromosom>();

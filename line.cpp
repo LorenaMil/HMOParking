@@ -78,11 +78,11 @@ void printLines(vector<Line> lines){
 
 void printLinesAll(vector<Line> lines){
 	for (int i = 0; i < lines.size(); i++){
-		cout << lines[i].index << ":\t";
+		/*cout << lines[i].index << ":\t";
 		cout << "Length: " << lines[i].length << ":\t";
 		cout << "Used: " << usedLength(lines[i]) << ":\t";
 		cout << "Type: " << lines[i].type << ":\t";
-		cout << "Allow: " << lines[i].allowedCars << ":\t";
+		cout << "Allow: " << lines[i].allowedCars << ":\t";*/
 		for (int j = 0; j < lines[i].cars.size(); j++){
 			cout << lines[i].cars[j].index << " ";
 		}

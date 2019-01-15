@@ -44,9 +44,10 @@ vector<Car> sortCarsByTime(vector<Car> cars){
 }
 
 void printCars(vector<Car> cars){
-	for (int i = 0; i < cars.size(); i++){
+	cout << "Unset cars\n";
+	for (unsigned i = 0; i < cars.size(); i++){
 		cout << cars[i].index << " " << cars[i].type << " " << cars[i].time << " " << cars[i].length << "Lines: ";
-		for(int j = 0; j < cars[i].allowedLines.size(); j++){
+		for(unsigned j = 0; j < cars[i].allowedLines.size(); j++){
 			cout << cars[i].allowedLines[j] << " ";
 		}
 		cout << "\n";
