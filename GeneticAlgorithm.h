@@ -47,7 +47,7 @@ class GeneticAlgorithm {
 		GeneticAlgorithm(int elite, int popsize, double mutprob,bool elimination) :elitism(elite), populationSize(popsize), mutationProbability(mutprob),elimination(elimination) {};
 	
 	private:
-
+		std::vector<Chromosom> tournament;
 
 		void next_gen_generational() {};
 
