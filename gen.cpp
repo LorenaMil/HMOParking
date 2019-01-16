@@ -76,8 +76,8 @@ int schedule[100];
 	}
 */
 
-	void readFromFile() {
-		ifstream file("instanca1.txt");
+	void readFromFile(char** argv) {
+		ifstream file(argv[1]);
 		int numLine = 0;
 		if (file.is_open()) {
 			string line;
@@ -387,7 +387,7 @@ int schedule[100];
 		//printCars(unsetCars);
 		//cout << "\n";
 
-		//printLinesAll(lines);
+		printLinesAll(lines);
 		//cout << "\n";
 		//cout << done << "\n";
 
@@ -404,12 +404,16 @@ int schedule[100];
 
 
 	int main(int argc, char** argv) {
-		readFromFile();
+		if (argc == 2) {
+			readFromFile(argv);
+		}
+		std::string number = argv[1];
+		auto charn=number[8];
 		startingInstance();
 		goal::init_carlength(cars);
-		int population_size = 5;
+		int population_size = 10;
 		int elitism = 1;
-		double mutation_probability = 0.1;
+		double mutation_probability = 0.4;
 		bool first = false;
 		bool second = false;
 		bool third = false;
@@ -431,9 +435,12 @@ int schedule[100];
 
 				first = true;
 				auto best = ga.evaluate();
-				//cout << "1min\n";
+				cout << "1min\n";
+
+				std::string title = "res-1m-i";
+				title += charn;
 				//printLinesGoodFormat(best.chromosom_representation);
-				write("res-1m-1.txt",best.chromosom_representation);
+				write(title,best.chromosom_representation);
 				/*cout << goal::firstGoal(best.chromosom_representation)<<"\n";
 				cout << goal::firstSubgoalF(best.chromosom_representation)<<"\n";
 				cout << goal::secondSubgoalF(best.chromosom_representation) << "\n";
@@ -450,7 +457,9 @@ int schedule[100];
 				second = true;
 				auto best = ga.evaluate();
 				cout << "5min\n";
-				write("res-5m-1.txt", best.chromosom_representation);
+				std::string title = "res-5m-i";
+				title += charn;
+				write(title, best.chromosom_representation);
 				//printLinesGoodFormat(best.chromosom_representation);
 				return 0;
 				///write best to file res-5m-instancenumber
