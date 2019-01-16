@@ -128,10 +128,10 @@ int totalLinesLength(const vector<Line> & lines){
 int numDiffTypes(const vector<Line> & lines){
 	int count = 0;
 	for (int i = 1; i < lines.size(); i++){
-		//if (lines[i].type == 0) break;
-		if (lines[i-1].type != lines[i].type)
-			count++;
-
+		if (lines[i].type != 0) {
+			if (lines[i - 1].type != lines[i].type)
+				count++;
+		}
 	}
 
 	return count;
@@ -153,7 +153,9 @@ int numUsedLines(const vector<Line> & lines){
 double unusedCapacity(const vector<Line> & lines){
 	double count = 0.0;
 	for (int i = 0; i < lines.size(); i++){
-		count += lines[i].length - usedLength(lines[i]);
+		if (usedLength(lines[i]) > 0) {
+			count += lines[i].length - usedLength(lines[i]);
+		}
 	}
 
 	return count;
