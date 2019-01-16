@@ -423,20 +423,20 @@ int schedule[100];
 		c.blockList = blockList;
 		c.evaluation();
 		ga.initialize(c);
-		int cunt = 0;
+		int counter = 0;
 		auto start = std::chrono::high_resolution_clock::now();
 		bool condition = false;
 		while (true) {
 			ga.next_gen();
-			//cout << cunt<<"\n";
+			//cout << counter<<"\n";
 			//cout << std::chrono::duration_cast<std::chrono::minutes>(start - std::chrono::high_resolution_clock::now()).count() << "\n";
-			cunt++;
+			counter++;
 			if (std::chrono::duration_cast<std::chrono::minutes>(start - std::chrono::high_resolution_clock::now()).count() <= -1 && first == false) {
 
 				first = true;
 				auto best = ga.evaluate();
 				cout << "1min\n";
-
+				cout << counter<<"\n";
 				std::string title = "res-1m-i";
 				title += charn;
 				//printLinesGoodFormat(best.chromosom_representation);
@@ -457,19 +457,24 @@ int schedule[100];
 				second = true;
 				auto best = ga.evaluate();
 				cout << "5min\n";
+				cout << counter << "\n";
 				std::string title = "res-5m-i";
 				title += charn;
 				write(title, best.chromosom_representation);
+				counter = 0;
 				//printLinesGoodFormat(best.chromosom_representation);
-				return 0;
+				//return 0;
 				///write best to file res-5m-instancenumber
 			}
-			else if (third == false && condition) {
+			else if (third == false && counter>200000) {
 				third = true;
 				auto best = ga.evaluate();
-
-				printLinesGoodFormat(best.chromosom_representation);
+				std::string title = "res-n-i";
+				title += charn;
+				write(title, best.chromosom_representation);
+				//printLinesGoodFormat(best.chromosom_representation);
 				///write best to file res-n-instancenumber
+				return 0;
 				break;
 
 			}
