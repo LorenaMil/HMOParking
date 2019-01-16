@@ -466,7 +466,7 @@ int schedule[100];
 				//return 0;
 				///write best to file res-5m-instancenumber
 			}
-			else if (third == false && counter>200000) {
+			else if (first==true && second==true && third == false && counter>200000) {
 				third = true;
 				auto best = ga.evaluate();
 				std::string title = "res-n-i";

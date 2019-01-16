@@ -149,12 +149,21 @@ class Chromosom {
 		}
 
 
-		/*void mutate3() {
+		void mutate3() {
 			auto line_index = std::rand() % chromosom_representation.size();
 			auto line = chromosom_representation[line_index];
+			std::vector<Line> onecarlines;
+			for (auto linec : chromosom_representation) {
+				if (linec.cars.size() == 1) {
+					onecarlines.push_back(linec);
+				}
+			}
+			if (onecarlines.size() == 0) { return; }
 			///select line with one car
 			while (line.cars.size() != 1) {
-				line_index = std::rand() % chromosom_representation.size();
+				auto lindex = std::rand() % onecarlines.size();
+				line_index = onecarlines[lindex].index - 1;
+				//line_index = std::rand() % chromosom_representation.size();
 				line = chromosom_representation[line_index];
 			}
 			auto & trueLine = chromosom_representation[line_index];
@@ -169,7 +178,7 @@ class Chromosom {
 					indicesOfAllowed.insert(line.first);
 				}
 			}
-
+			if (indicesOfAllowed.size() == 0) { return; }
 			///we need to be able to add car to line
 			while (line_index==line_index2) {
 				auto ind= std::rand() % indicesOfAllowed.size();
@@ -190,13 +199,13 @@ class Chromosom {
 			}
 
 		
-		}*/
+		}
 
 		static Chromosom GetChild(const Chromosom & c1, const Chromosom & c2) {
 			auto a = c1;
 			auto b = c2;
-			//a.mutate3();
-			//b.mutate3();
+			a.mutate3();
+			b.mutate3();
 			a.mutate2();
 			b.mutate2();
 			a.mutate();
