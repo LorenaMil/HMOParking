@@ -16,6 +16,7 @@
 #include <chrono>
 #include "goal_function.h"
 #include "blockLines.h"
+#include "Writer.h"
 using namespace std;
 
 int numCars = 0;
@@ -403,7 +404,7 @@ int schedule[100];
 
 
 
-	int main() {
+	int main(int argc, char** argv) {
 		readFromFile();
 		startingInstance();
 		goal::init_carlength(cars);
@@ -431,18 +432,18 @@ int schedule[100];
 
 				first = true;
 				auto best = ga.evaluate();
-				cout << "1min\n";
-				printLinesGoodFormat(best.chromosom_representation);
-				
-				cout << goal::firstGoal(best.chromosom_representation)<<"\n";
+				//cout << "1min\n";
+				//printLinesGoodFormat(best.chromosom_representation);
+				write("res-1m-1.txt",best.chromosom_representation);
+				/*cout << goal::firstGoal(best.chromosom_representation)<<"\n";
 				cout << goal::firstSubgoalF(best.chromosom_representation)<<"\n";
 				cout << goal::secondSubgoalF(best.chromosom_representation) << "\n";
 				cout << goal::thirdSubgoalF(best.chromosom_representation) << "\n";
 				cout << goal::secondGoal(best.chromosom_representation) << "\n";
 				cout << goal::firstSubgoalG(best.chromosom_representation) << "\n";
 				cout << goal::secondSubgoalG(best.chromosom_representation) << "\n";
-				cout << goal::thirdSubgoalG(best.chromosom_representation) << "\n";
-				return 0;
+				cout << goal::thirdSubgoalG(best.chromosom_representation) << "\n";*/
+				//return 0;
 				///write best to file res-1m-instancenumber
 			}
 			else if (std::chrono::duration_cast<std::chrono::minutes>(start - std::chrono::high_resolution_clock::now()).count() <= -5 && second == false) {
@@ -450,7 +451,8 @@ int schedule[100];
 				second = true;
 				auto best = ga.evaluate();
 				cout << "5min\n";
-				printLinesGoodFormat(best.chromosom_representation);
+				write("res-5m-1.txt", best.chromosom_representation);
+				//printLinesGoodFormat(best.chromosom_representation);
 				return 0;
 				///write best to file res-5m-instancenumber
 			}

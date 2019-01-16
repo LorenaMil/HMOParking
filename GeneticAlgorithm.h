@@ -25,7 +25,7 @@ class GeneticAlgorithm {
 				c2.evaluation();
 				population.push_back(c2);
 			}
-			set_fitness_sum();
+			//set_fitness_sum();
 
 		}
 
@@ -38,7 +38,7 @@ class GeneticAlgorithm {
 
 		void next_gen() {
 			next_generation_elimination();
-			set_fitness_sum();
+			//set_fitness_sum();
 		};
 
 
@@ -47,7 +47,7 @@ class GeneticAlgorithm {
 		GeneticAlgorithm(int elite, int popsize, double mutprob,bool elimination) :elitism(elite), populationSize(popsize), mutationProbability(mutprob),elimination(elimination) {};
 	
 	private:
-		std::vector<Chromosom> tournament;
+		//std::vector<Chromosom> tournament;
 
 		void next_gen_generational() {};
 
@@ -77,6 +77,11 @@ class GeneticAlgorithm {
 			auto child = Chromosom::GetChild(parent1,parent2);
 			if (rand() % 100 < mutationProbability * 100) {
 				child.mutate();
+
+			}
+			if (rand() % 100 < mutationProbability * 100) {
+				child.mutate2();
+
 			}
 			child.evaluation();
 			population.push_back(child);

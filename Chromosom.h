@@ -6,6 +6,7 @@
 #include <random>
 #include "goal_function.h"
 #include "blockLines.h"
+#include <set>
 class Chromosom {
 
 
@@ -89,15 +90,15 @@ class Chromosom {
 				trueLine2.cars[index2] = car;
 			}
 			else{
-				//return;
-				mutate2();
+				return;
+				//mutate2();
 			}
 
 			///sort cars
 			trueLine.cars = sortCarsByTime(trueLine.cars);
 			trueLine2.cars = sortCarsByTime(trueLine2.cars);
 			//evaluation();
-			mutate2();
+			//mutate2();
 		}
 
 
@@ -137,17 +138,18 @@ class Chromosom {
 			
 			}
 			else {
-				mutate3();
+				return;
+				//mutate3();
 				
 			}
 			
 		
 			//evaluation();
-			mutate3();
+			//mutate3();
 		}
 
 
-		void mutate3() {
+		/*void mutate3() {
 			auto line_index = std::rand() % chromosom_representation.size();
 			auto line = chromosom_representation[line_index];
 			///select line with one car
@@ -160,28 +162,43 @@ class Chromosom {
 			auto line_index2 = std::rand() % chromosom_representation.size();
 			auto line2 = chromosom_representation[line_index2];
 			auto & car = trueLine.cars[0];
+
+			std::set<int> indicesOfAllowed;
+			for (auto line : car.allowedLines) {
+				if (line.second) {
+					indicesOfAllowed.insert(line.first);
+				}
+			}
+
 			///we need to be able to add car to line
-			while (line_index!=line_index2) {
-				line_index2 = std::rand() % chromosom_representation.size();
+			while (line_index==line_index2) {
+				auto ind= std::rand() % indicesOfAllowed.size();
+				auto it = indicesOfAllowed.begin();
+				advance(it, ind);
+				line_index2 =*(it) ;
 				line2 = chromosom_representation[line_index2];
 			}
 			auto & trueLine2 = chromosom_representation[line_index2];
-			if (canCarFit(blockList, chromosom_representation, trueLine2, car) && !blockPair(blockList, trueLine, trueLine2) && !blockPair(blockList, trueLine2, trueLine)&&canAddToLine(line2,car)) {
-				std::cerr <<"Line:"<< trueLine.index << "Car:" << trueLine.cars[0].index;
+			if (canCarFit(blockList, chromosom_representation, trueLine2, car) && canAddToLine(line2,car)) {
+				std::cerr <<"Line:"<< trueLine.index << "Car:" << trueLine.cars[0].index<<" ";
+				std::cerr << "to Line:" << trueLine2.index <<"\n";
 				trueLine.type = 0;
-				trueLine.cars.empty();
-				trueLine2.cars.push_back(car);
+				trueLine2.cars.push_back(std::move(trueLine.cars[0]));
 				trueLine2.type = car.type;
 				trueLine2.cars = sortCarsByTime(trueLine2.cars);
 				//evaluation();
 			}
 
 		
-		}
+		}*/
 
 		static Chromosom GetChild(const Chromosom & c1, const Chromosom & c2) {
 			auto a = c1;
 			auto b = c2;
+			//a.mutate3();
+			//b.mutate3();
+			a.mutate2();
+			b.mutate2();
 			a.mutate();
 			b.mutate();
 			a.evaluation();
@@ -197,9 +214,9 @@ class Chromosom {
 		}
 		
 		double evaluation() {
-			auto sg=goal::secondGoal(chromosom_representation);
+			auto sg = goal::secondGoal(chromosom_representation);
 			auto fg = goal::firstGoal(chromosom_representation);
-			fitness = sg / ( fg + .0001);
+			fitness = sg / fg ;
 			return fitness;
 		}
 

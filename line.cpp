@@ -231,7 +231,7 @@ vector<Line> sortLinesByNum(vector<Line> lines){
 	return lines;
 }
 
-bool lineHasCarWithID(const Line & line, int id){
+bool lineHasCarWithID(const Line & line, const int & id){
 	for (int i = 0; i < line.cars.size(); i++){
 		if (line.cars[i].index == id) 
 			return true;

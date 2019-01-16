@@ -2,7 +2,7 @@
 //#include "Chromosom.h"
 //#include "GeneticAlgorithm.h"
 //#include <chrono>
-/*int main() {
+/*int main(int argc, char** argv) {
 
 
 
