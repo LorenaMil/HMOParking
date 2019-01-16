@@ -37,8 +37,7 @@ class GeneticAlgorithm {
 		}
 
 		void next_gen() {
-			if (elimination) next_generation_elimination();
-			else next_gen_generational();
+			next_generation_elimination();
 			set_fitness_sum();
 		};
 

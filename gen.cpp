@@ -486,7 +486,7 @@ int schedule[100];
 		bool condition = false;
 		while (true) {
 			ga.next_gen();
-			cout << cunt<<"\n";
+			//cout << cunt<<"\n";
 			//cout << std::chrono::duration_cast<std::chrono::minutes>(start - std::chrono::high_resolution_clock::now()).count() << "\n";
 			cunt++;
 			if (std::chrono::duration_cast<std::chrono::minutes>(start - std::chrono::high_resolution_clock::now()).count() <= -1 && first == false) {
@@ -495,6 +495,15 @@ int schedule[100];
 				auto best = ga.evaluate();
 				cout << "1min\n";
 				printLinesGoodFormat(best.chromosom_representation);
+				
+				cout << goal::firstGoal(best.chromosom_representation)<<"\n";
+				cout << goal::firstSubgoalF(best.chromosom_representation)<<"\n";
+				cout << goal::secondSubgoalF(best.chromosom_representation) << "\n";
+				cout << goal::thirdSubgoalF(best.chromosom_representation) << "\n";
+				cout << goal::secondGoal(best.chromosom_representation) << "\n";
+				cout << goal::firstSubgoalG(best.chromosom_representation) << "\n";
+				cout << goal::secondSubgoalG(best.chromosom_representation) << "\n";
+				cout << goal::thirdSubgoalG(best.chromosom_representation) << "\n";
 				return 0;
 				///write best to file res-1m-instancenumber
 			}

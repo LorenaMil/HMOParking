@@ -10,10 +10,10 @@ namespace goal {
 
 		// First subgoal
 	double firstSubgoalF(const vector<Line> & lines) {
-		int factor = numUsedLines(lines) - 1;
+		int factor = numUsedLines(lines)-1;
 		int numDiff = numDiffTypes(lines);
 
-		return (double)factor / numDiff;
+		return (double)numDiff / factor;
 	}
 
 	// Second subgoal
@@ -50,7 +50,7 @@ namespace goal {
 	// Second subgoal
 	double secondSubgoalG(const vector<Line> & lines) {
 		int pairs = numSameScheduleLines(lines);
-		int factor = numUsedLines(lines) - 1;
+		int factor = numUsedLines(lines)-1;
 
 		return ((double)pairs) / factor;
 	}

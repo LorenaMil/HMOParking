@@ -24,13 +24,13 @@ struct Line{
 
 vector<Line> createLines(int numlines, int length[], vector<Car> cars);
 
-double usedLength(Line line);
+double usedLength(const Line & line);
 
-bool canAddToLine(Line line, Car car);
+bool canAddToLine(const Line & line, const Car & car);
 
 Line addCarToLine(Line line, Car car);
 
-Line getLine(vector<Line> lines, int index);
+Line getLine(const vector<Line> & lines, int index);
 
 void printLines(vector<Line> lines);
 
@@ -42,26 +42,26 @@ void printLinesUsage(vector<Line> lines);
 
 int findIndexVector(vector<Line> lines, int indexLine);
 
-int totalLinesLength(vector<Line> lines);
+int totalLinesLength(const vector<Line> & lines);
 
-int numDiffTypes(vector<Line> lines);
+int numDiffTypes(const vector<Line> & lines);
 
-int numUsedLines(vector<Line> lines);
+int numUsedLines(const vector<Line> & lines);
 
-double unusedCapacity(vector<Line> lines);
+double unusedCapacity(const vector<Line> & lines);
 
-int numSameScheduleInLine(vector<Line> lines);
+int numSameScheduleInLine(const vector<Line> & lines);
 
-int numSameScheduleLines(vector<Line> lines);
+int numSameScheduleLines(const vector<Line> & lines);
 
-int timeDiff(vector<Line> lines);
+int timeDiff(const vector<Line> & lines);
 
-int numOfNeighbours(vector<Line> lines);
+int numOfNeighbours(const vector<Line> & lines);
 
 vector<Line> sortLinesByNum(vector<Line> lines);
 
-bool lineHasCarWithID(Line line, int id);
+bool lineHasCarWithID(const Line & line, const int & id);
 
-int linesWithType(vector<Line> lines, int type);
+int linesWithType(const vector<Line> & lines, const int & type);
 
 #endif
