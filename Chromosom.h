@@ -83,7 +83,8 @@ class Chromosom {
 			}*/
 			///swap them if possible
 			if ((allowedLineForCar(trueLine.index, car2) && allowedLineForCar(trueLine2.index, car))
-				&& (canCarFit(blockList, chromosom_representation, trueLine, car2) && canCarFit(blockList, chromosom_representation, trueLine2, car))) {
+				&& (canCarFit(blockList, chromosom_representation, trueLine, car2) && canCarFit(blockList, chromosom_representation, trueLine2, car))
+				&& (!blockPair(blockList, trueLine, trueLine2) && !blockPair(blockList, trueLine2, trueLine))) { // lines should not be blocking-blocked pair!
 				trueLine.cars[index1] = car2;
 				trueLine2.cars[index2] = car;
 			}

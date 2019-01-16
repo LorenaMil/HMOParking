@@ -19,33 +19,79 @@ struct Block {
 	vector<int> blockedLines;
 };
 
-bool stillBlocked(vector<Block> blockl, int index) {
-	for (int i = 0; i < blockl.size(); i++) {
-		for (int j = 0; j < blockl[i].blockedLines.size(); j++) {
-			if (index == blockl[i].blockedLines[j]) return true;
+bool stillBlocked(vector<Block> blocks, int index) {
+	for (int i = 0; i < blocks.size(); i++) {
+		for (int j = 0; j < blocks[i].blockedLines.size(); j++) {
+			if (index == blocks[i].blockedLines[j]) return true;
 		}
 	}
 	return false;
 }
 
-int findBlockingLine(vector<Block> blocks, Line line){
+bool isBlocking(vector<Block> blocks, Line line){
+	for (int i = 0; i < blocks.size(); i++) {
+		if (line.index == blocks[i].blockingLine) return true;
+	}
+	return false;
+}
+
+vector<int> findBlockingLine(vector<Block> blocks, Line line){
+	vector<int> allBlocking;
 	for (int i = 0; i < blocks.size(); i++) {
 		for (int j = 0; j < blocks[i].blockedLines.size(); j++) {
-			if (line.index == blocks[i].blockedLines[j]) return blocks[i].blockingLine;
+			if (line.index == blocks[i].blockedLines[j]) allBlocking.push_back(blocks[i].blockingLine);
 		}
 	}
-	return 0;
+	return allBlocking;
+}
+
+// test if this is blocking line and one of blocked lines
+bool blockPair(vector<Block> blocks, Line lineBlocking, Line lineBlocked){
+	for (int i = 0; i < blocks.size(); i++) {
+		if (lineBlocking.index == blocks[i].blockingLine){
+			for (int j = 0; j < blocks[i].blockedLines.size(); j++) {
+				if (lineBlocked.index == blocks[i].blockedLines[j]) return true;
+			}
+		}
+		
+	}
+	return false;
+}
+
+vector<int> getBlockedLines(vector<Block> blocks, Line line){
+	vector<int> allBlocked;
+	for (int i = 0; i < blocks.size(); i++) {
+		if (line.index == blocks[i].blockingLine){
+			for (int j = 0; j < blocks[i].blockedLines.size(); j++) 
+				allBlocked.push_back(blocks[i].blockedLines[j]);
+		}
+	}
+	return allBlocked;
 }
 
 bool canCarFit(vector<Block> blocks, vector<Line> lines, Line line, Car car){
-	int idBlocking = findBlockingLine(blocks, line);
-	if (idBlocking != 0){
-		Line bLine = getLine(lines, idBlocking);
-		if (bLine.cars[bLine.cars.size()-1].time < car.time)
-			return true;
+	vector<int> allBlocking = findBlockingLine(blocks, line);
+	int count1 = 0, count2 = 0;
+	if (allBlocking.size() != 0){ // if line is blocked
+		for (int i = 0; i < allBlocking.size(); i++){
+			Line bLine = getLine(lines, allBlocking[i]);
+			if (bLine.cars[bLine.cars.size()-1].time < car.time)
+				count1++;
+		}
+		if (count1 == allBlocking.size()) return true;
+		else return false;
+	}
+	else if (isBlocking(blocks, line)){ // line is blocking, add only if car time is before first car in every blocked line
+		vector<int> allBlocked = getBlockedLines(blocks, line);
+		for (int i = 0; i < allBlocked.size(); i++){
+			Line bLine2 = getLine(lines, allBlocked[i]);
+			if (car.time < bLine2.cars[0].time)
+				count2++;
+		}
+		if (count2 == allBlocked.size()) return true;
 		else return false;
 	}	
-	else return true;
+	else return true; // line is normal, no limits
 }
 
 
