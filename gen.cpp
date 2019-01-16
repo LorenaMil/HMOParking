@@ -177,21 +177,20 @@ int schedule[100];
 	}
 
 	bool strictLimits(Line line, Car car){
-		if ((line.length >= ((car.length * 2) + 1)) || (line.length >= ((car.length * 3) + 1))) return true;
+		//if ((line.length >= ((car.length * 2) + 1)) || (line.length >= ((car.length * 3) + 1))) return true;
 		
 		if (car.length == findMaxLength()){ // max length
-			if (line.length < (findMinLength()*2+1)) return true;
-			//if (roundedLength(line, car)) return true;
+			if (line.length < (findMinLength()*2) || (line.length < (findMinLength()*3+1)  && line.length >= (car.length*2+1) )) return true;
 			else return false;
 		}
 		else if (car.length == findMinLength()){ // min length
-			if (line.length >= (car.length*2 + 1)) return true;
+			if ((line.length >= ((car.length * 2) + 1)) || (line.length >= ((car.length * 3) + 1))) return true;
 			else return false;
 		} else { // in the middle
 			if (line.length >= (car.length*2 + 1) && line.length < (findMinLength()*3+1)) return true;
-			//if (roundedLength(line, car)) return true;
 			else return false;
 		}
+
 	}
 
 	int myrandom(int i) { return std::rand() % i; }
