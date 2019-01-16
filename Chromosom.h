@@ -29,8 +29,8 @@ class Chromosom {
 			auto car = std::move(trueLine.cars[index1]);
 
 			///select line of same type but not the same line
-			auto line_index2 = std::rand()%chromosom_representation.size();
-			auto line2=chromosom_representation[line_index2];
+			auto line_index2 = std::rand() % chromosom_representation.size();
+			auto line2 = chromosom_representation[line_index2];
 			unsigned int index2;
 
 			int count = 0;
@@ -63,7 +63,7 @@ class Chromosom {
 				auto line1_in_blocked_lines = std::find(blocked_lines.begin(), blocked_lines.end(), line_index) != blocked_lines.end();
 				auto line2_in_blocked_lines = std::find(blocked_lines.begin(), blocked_lines.end(), line_index2) != blocked_lines.end();
 				///line 1 not in blocked lines
-				if (!line1_in_blocked_lines) 
+				if (!line1_in_blocked_lines)
 				{
 					///line 2 not in blocked lines
 					if (line2_in_blocked_lines) {
@@ -77,7 +77,7 @@ class Chromosom {
 
 					///last car in blocking line gets out before first car in line 1
 					bool timecheck1 = bl.cars[bl.cars.size()].time < chromosom_representation[line_index].cars[0].time;
-					
+
 
 				}
 			}*/
@@ -88,13 +88,62 @@ class Chromosom {
 				trueLine.cars[index1] = car2;
 				trueLine2.cars[index2] = car;
 			}
-
+			else{
+				//return;
+				mutate2();
+			}
 
 			///sort cars
 			trueLine.cars = sortCarsByTime(trueLine.cars);
 			trueLine2.cars = sortCarsByTime(trueLine2.cars);
 			evaluation();
+			mutate2();
 		}
+
+
+		void mutate2() {
+			
+			auto line_index = std::rand() % chromosom_representation.size();
+			auto line = chromosom_representation[line_index];
+			///select not empty and not blocking or blocked lines
+			while (line.cars.size() == 0 || isBlocking(blockList,line) || findBlockingLine(blockList,line).size()!=0) {
+				line_index = std::rand() % chromosom_representation.size();
+				line = chromosom_representation[line_index];
+			}
+			auto & trueLine = chromosom_representation[line_index];
+
+
+			auto line_index2 = std::rand() % chromosom_representation.size();
+			auto line2 = chromosom_representation[line_index2];
+			while (line2.cars.size() == 0 || isBlocking(blockList, line2) || findBlockingLine(blockList, line2).size() != 0 ||line_index==line_index2) {
+				line_index2 = std::rand() % chromosom_representation.size();
+				line2 = chromosom_representation[line_index2];
+			}
+			auto & trueline2= chromosom_representation[line_index2];
+
+			if (usedLength(trueLine) <= trueline2.length && usedLength(trueline2) <= trueLine.length) {
+
+				
+				for (auto & car1 : line.cars) {
+					if (!allowedLineForCar(line2.index, car1)) { return; }
+				}
+				for (auto & car2 : line2.cars) {
+					if (!allowedLineForCar(line.index, car2)) { return; }
+				}
+				trueLine.type = line2.type;
+				trueline2.type = line.type;
+				trueLine.cars = line2.cars;
+				trueline2.cars = line.cars;
+			
+			}
+			else {
+				return;
+			}
+			
+		
+			evaluation();
+		}
+
 		static Chromosom GetChild(const Chromosom & c1, const Chromosom & c2) {
 			auto a = c1;
 			auto b = c2;

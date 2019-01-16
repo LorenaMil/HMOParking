@@ -19,7 +19,7 @@ struct Block {
 	vector<int> blockedLines;
 };
 
-bool stillBlocked(vector<Block> blocks, int index) {
+bool stillBlocked(const vector<Block> & blocks, int index) {
 	for (int i = 0; i < blocks.size(); i++) {
 		for (int j = 0; j < blocks[i].blockedLines.size(); j++) {
 			if (index == blocks[i].blockedLines[j]) return true;
@@ -28,14 +28,14 @@ bool stillBlocked(vector<Block> blocks, int index) {
 	return false;
 }
 
-bool isBlocking(vector<Block> blocks, Line line){
+bool isBlocking(const vector<Block> & blocks, Line line){
 	for (int i = 0; i < blocks.size(); i++) {
 		if (line.index == blocks[i].blockingLine) return true;
 	}
 	return false;
 }
 
-vector<int> findBlockingLine(vector<Block> blocks, Line line){
+vector<int> findBlockingLine(const vector<Block> & blocks, Line line){
 	vector<int> allBlocking;
 	for (int i = 0; i < blocks.size(); i++) {
 		for (int j = 0; j < blocks[i].blockedLines.size(); j++) {
@@ -46,7 +46,7 @@ vector<int> findBlockingLine(vector<Block> blocks, Line line){
 }
 
 // test if this is blocking line and one of blocked lines
-bool blockPair(vector<Block> blocks, Line lineBlocking, Line lineBlocked){
+bool blockPair(const vector<Block> & blocks, Line lineBlocking, Line lineBlocked){
 	for (int i = 0; i < blocks.size(); i++) {
 		if (lineBlocking.index == blocks[i].blockingLine){
 			for (int j = 0; j < blocks[i].blockedLines.size(); j++) {
@@ -58,7 +58,7 @@ bool blockPair(vector<Block> blocks, Line lineBlocking, Line lineBlocked){
 	return false;
 }
 
-vector<int> getBlockedLines(vector<Block> blocks, Line line){
+vector<int> getBlockedLines(const vector<Block> & blocks, Line line){
 	vector<int> allBlocked;
 	for (int i = 0; i < blocks.size(); i++) {
 		if (line.index == blocks[i].blockingLine){
@@ -69,7 +69,7 @@ vector<int> getBlockedLines(vector<Block> blocks, Line line){
 	return allBlocked;
 }
 
-bool canCarFit(vector<Block> blocks, vector<Line> lines, Line line, Car car){
+bool canCarFit(const vector<Block> & blocks, const vector<Line> & lines, Line line, Car car){
 	vector<int> allBlocking = findBlockingLine(blocks, line);
 	int count1 = 0, count2 = 0;
 	if (allBlocking.size() != 0){ // if line is blocked
