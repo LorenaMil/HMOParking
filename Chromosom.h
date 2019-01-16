@@ -180,6 +180,7 @@ class Chromosom {
 			}
 			if (indicesOfAllowed.size() == 0) { return; }
 			///we need to be able to add car to line
+
 			while (line_index==line_index2) {
 				auto ind= std::rand() % indicesOfAllowed.size();
 				auto it = indicesOfAllowed.begin();
@@ -188,11 +189,16 @@ class Chromosom {
 				line2 = chromosom_representation[line_index2];
 			}
 			auto & trueLine2 = chromosom_representation[line_index2];
-			if (canCarFit(blockList, chromosom_representation, trueLine2, car) && canAddToLine(line2,car)) {
+			if (canCarFit(blockList, chromosom_representation, trueLine2, car) && canAddToLine(line2,car) && !blockPair(blockList, trueLine, trueLine2) && !blockPair(blockList, trueLine2, trueLine)) {
 				std::cerr <<"Line:"<< trueLine.index << "Car:" << trueLine.cars[0].index<<" ";
 				std::cerr << "to Line:" << trueLine2.index <<"\n";
 				trueLine.type = 0;
 				trueLine2.cars.push_back(std::move(trueLine.cars[0]));
+				trueLine.cars.erase(trueLine.cars.begin());
+				std::cerr << trueLine.cars.size()<<" ";
+				std::cerr << chromosom_representation[line_index].cars.size()<<"\n";
+				std::cerr << goal::firstGoal(chromosom_representation)<<" ";
+				std::cerr << goal::secondGoal(chromosom_representation);
 				trueLine2.type = car.type;
 				trueLine2.cars = sortCarsByTime(trueLine2.cars);
 				//evaluation();

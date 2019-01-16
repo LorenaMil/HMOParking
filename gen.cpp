@@ -471,6 +471,8 @@ int schedule[100];
 				auto best = ga.evaluate();
 				std::string title = "res-n-i";
 				title += charn;
+				cout << "n\n";
+				cout << counter;
 				write(title, best.chromosom_representation);
 				//printLinesGoodFormat(best.chromosom_representation);
 				///write best to file res-n-instancenumber
