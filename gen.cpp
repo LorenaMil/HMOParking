@@ -157,6 +157,42 @@ int schedule[100];
 		}
 	}
 
+
+	int findMaxLength(){
+		int max = 0;
+		for (int i = 0; i < cars.size(); i++){
+			if (max < cars[i].length) max = cars[i].length;
+		}
+		return max;
+	}
+
+
+	int findMinLength(){
+		int min = 1000;
+		for (int i = 0; i < cars.size(); i++){
+			if (min > cars[i].length) min = cars[i].length;
+		}
+		return min;
+	}
+
+	bool strictLimits(Line line, Car car){
+		if ((line.length >= ((car.length * 2) + 1)) || (line.length >= ((car.length * 3) + 1))) return true;
+		
+		if (car.length == findMaxLength()){ // max length
+			if (line.length < (findMinLength()*2+1)) return true;
+			//if (roundedLength(line, car)) return true;
+			else return false;
+		}
+		else if (car.length == findMinLength()){ // min length
+			if (line.length >= (car.length*2 + 1)) return true;
+			else return false;
+		} else { // in the middle
+			if (line.length >= (car.length*2 + 1) && line.length < (findMinLength()*3+1)) return true;
+			//if (roundedLength(line, car)) return true;
+			else return false;
+		}
+	}
+
 	int myrandom(int i) { return std::rand() % i; }
 
 	/*
@@ -172,33 +208,6 @@ int schedule[100];
 
 		vector<Block> blockListCopy = blockList;
 
-		//********************** TRY 1.0 ***************************//
-			// Completely shuffled order, start filling blocked lines when blocking line is full
-
-			// put non blocked lines, and blocking lines
-			// after bocking lines is full, put blocked lines
-
-		vector<int> indLines;
-		for (int i = 1; i <= numLines; i++) {
-			indLines.push_back(i);
-		}
-
-		//remove blocked
-		for (int i = 0; i < blockList.size(); i++) {
-			for (int j = 0; j < blockList[i].blockedLines.size(); j++) {
-				indLines.erase(remove(indLines.begin(), indLines.end(), blockList[i].blockedLines[j]), indLines.end());
-			}
-		}
-		//	random_shuffle ( indLines.begin(), indLines.end() );
-		/*	for (int i = 0; i < indLines.size(); i++){
-				cout << indLines[i] << " ";
-			}*/
-			/*
-				vector<int> blockingLines;
-				for (int i = 0; i < blockList.size(); i++){
-					blockingLines.push_back(blockList[i].blockingLine);
-				}
-			*/
 
 			//***************** TRY 2.0 **************************************//
 				// Try for greedy optimization - order is not random!
@@ -259,126 +268,53 @@ int schedule[100];
 		}
 
 
-		//********** FIRST TRY -- RANDOM FILLING ***********************//
-			// fill lines
-		/*Line line;
-		int index = 0;
-		int done = 0;
-		vector<Car> unsetCars;
-		vector<int> shuffled; // used for first try!!!! shuffle indLines every time
 
-		for (int i = 0; i < cars.size(); i++) {
-			bool set = false;
-			Car car = cars[i];
+//*********************** TRY 2 - LAME GREEDY OPTIMIZATION **********************//
 
-			shuffled = indLines;
-			random_shuffle(shuffled.begin(), shuffled.end(), myrandom);
+	// fill lines
+	Line line;
+	int index = 0;
+	int done = 0;
+	vector<Car> unsetCars, carsFill, carsTmp;
+	vector<int> todo; // used for second try!!!!! ordered 
 
+	for (int i = 0; i < cars.size(); i++){
+		bool set = false;
+		Car car = cars[i];
 
 
+		todo = ordered;
 
-
-			// try to put
-			while (shuffled.size() > 0) {
-
-				//random_shuffle ( shuffled.begin(), shuffled.end(), myrandom );
-				index = shuffled[0];
-				line = lines[index - 1];
-				if ((((car.length > 50 && line.length < 85) || (usedLength(line) > 40))
-					|| (line.allowedCars < numCars - 1 && car.allowedLines.size() < numLines - 1))
-					&& canAddToLine(line, car)) {
-
-					line = addCarToLine(line, car);
-					lines.at(index - 1) = line;
-					done++;
-					set = true;
-					break;
-				}
-				else {
-					shuffled.erase(shuffled.begin());
-				}
+		
+		// try to put
+		while (todo.size() > 0){
+			index = todo[0];
+			line = lines[index-1];
+			index = todo[0];
+			line = lines[index-1];
+			if ((isBlocking(blockList, line) && strictLimits(line, car)) && canAddToLine(line, car)){
+				line = addCarToLine(line, car);
+				lines.at(index-1) = line;
+				done++;
+				set = true;
+				break;
 			}
-
-			if (!set) {
-				shuffled = indLines;
-				random_shuffle(shuffled.begin(), shuffled.end(), myrandom);
-				while (shuffled.size() > 0) {
-					//random_shuffle ( shuffled.begin(), shuffled.end(), myrandom );
-					index = shuffled[0];
-					line = lines[index - 1];
-					if (canAddToLine(line, car)) {
-						line = addCarToLine(line, car);
-						lines.at(index - 1) = line;
-						done++;
-						set = true;
-						break;
-					}
-					else {
-						shuffled.erase(shuffled.begin());
-					}
-				}
+			else {
+				todo.erase(todo.begin());
 			}
-
-
-			if (set) {
-				// check if some blocking line is full
-				Line bLine;
-				for (int i = 0; i < blockListCopy.size(); i++) {
-					bLine = getLine(lines, blockListCopy[i].blockingLine);
-					double left = bLine.length - usedLength(bLine) + 0.5;
-					bool full = false;
-					if (line.type == 1 && left < 53) full = true;
-					else if (line.type == 2 && left < 42) full = true;
-					else if (line.type == 3 && left < 44) full = true;
-					else full = false;
-					if (full) { // full line
-						// remove blocking line
-						indLines.erase(remove(indLines.begin(), indLines.end(), blockListCopy[i].blockingLine), indLines.end());
-						// add blocked lines
-						vector<Block> tmpBlock;
-						tmpBlock = blockListCopy; // block list without this blocking line, which will be removed
-						tmpBlock.erase(tmpBlock.begin() + i);
-						for (int j = 0; j < blockListCopy[i].blockedLines.size(); j++) {
-							if (!stillBlocked(tmpBlock, blockListCopy[i].blockedLines[j])) // add if its not blocked by some other blocking line
-								indLines.push_back(blockListCopy[i].blockedLines[j]);
-						}
-						blockListCopy.erase(blockListCopy.begin() + i);
-					}
-				}
-			}
-			else unsetCars.push_back(car);
 		}
-		*/
-
-		//*************** end ****************//
+		
 
 
-	//*********************** TRY 2 - LAME GREEDY OPTIMIZATION **********************//
-	
-		// fill lines
-		Line line;
-		int index = 0;
-		int done = 0;
-		vector<Car> unsetCars;
-		vector<int> todo; // used for second try!!!!! ordered
-		for (int i = 0; i < cars.size(); i++){
-			bool set = false;
-			Car car = cars[i];
-
-
+		if (!set){ // try one more time without all limits
 			todo = ordered;
-
-
 			// try to put
 			while (todo.size() > 0){
 				index = todo[0];
 				line = lines[index-1];
-				index = todo[0];
-				line = lines[index-1];
-				if ((((car.length > 50 && line.length < 90) || (car.length < 50 && line.length > 84) || (usedLength(line) > 40))
-					|| (line.allowedCars < numCars-1 && car.allowedLines.size() < numLines-1))
-					&& ((line.cars.size() == 0 && linesWithType(lines, car.type) < 13) || line.cars.size() > 0)
-					&& canAddToLine(line, car)){
+		
+				
+				if (strictLimits(line, car) && canAddToLine(line, car)){
 					line = addCarToLine(line, car);
 					lines.at(index-1) = line;
 					done++;
@@ -387,62 +323,64 @@ int schedule[100];
 				}
 				else {
 					todo.erase(todo.begin());
-				}
+				}	
 			}
-
-			if (!set){ // try one more time without all limits
-				todo = ordered;
-				// try to put
-				while (todo.size() > 0){
-					index = todo[0];
-					line = lines[index-1];
-					//random_shuffle ( shuffled.begin(), shuffled.end(), myrandom );
-
-					if (canAddToLine(line, car)){
-						line = addCarToLine(line, car);
-						lines.at(index-1) = line;
-						done++;
-						set = true;
-						break;
-					}
-					else {
-						todo.erase(todo.begin());
-					}
-
-				}
-			}
-
-			if (set){
-				// check if some blocking line is full
-				Line bLine;
-				for (int i = 0; i < blockListCopy.size(); i++){
-					bLine = getLine(lines, blockListCopy[i].blockingLine);
-					double left = bLine.length - usedLength(bLine) + 0.5;
-					bool full = false;
-					if (line.type == 1 && left < 53) full = true;
-					else if (line.type == 2 && left < 42) full = true;
-					else if (line.type == 3 && left < 44) full = true;
-					else full = false;
-					if (full){ // full line
-						// remove blocking line
-						ordered.erase(remove(ordered.begin(), ordered.end(), blockListCopy[i].blockingLine), ordered.end());
-						// add blocked lines
-
-						vector<Block> tmpBlock;
-						tmpBlock = blockListCopy; // block list without this blocking line, which will be removed
-						tmpBlock.erase(tmpBlock.begin() + i);
-						for (int j = 0; j < blockListCopy[i].blockedLines.size(); j++){
-							if (!stillBlocked(tmpBlock, blockListCopy[i].blockedLines[j])) // add if its not blocked by some other blocking line
-								ordered.push_back(blockListCopy[i].blockedLines[j]);
-						}
-						blockListCopy.erase(blockListCopy.begin() + i);
-					}
-				}
-			}
-			else unsetCars.push_back(car);
 		}
-	
-	// ******************** end *****************************//
+
+		if (!set){ // try one more time without all limits
+			todo = ordered;
+			// try to put
+			while (todo.size() > 0){
+				index = todo[0];
+				line = lines[index-1];
+				
+				if (canAddToLine(line, car)){
+					line = addCarToLine(line, car);
+					lines.at(index-1) = line;
+					done++;
+					set = true;
+					break;
+				}
+				else {
+					todo.erase(todo.begin());
+
+				}
+				
+			}
+		}
+
+		if (set){
+			// check if some blocking line is full
+			Line bLine;
+			for (int i = 0; i < blockListCopy.size(); i++){
+				bLine = getLine(lines, blockListCopy[i].blockingLine);
+				double left = bLine.length - usedLength(bLine) + 0.5;
+				bool full = false;
+				if (line.type == 1 && left < 53) full = true;
+				else if (line.type == 2 && left < 42) full = true;
+				else if (line.type == 3 && left < 44) full = true;
+				else full = false;
+				if (full){ // full line
+					// remove blocking line
+					ordered.erase(remove(ordered.begin(), ordered.end(), blockListCopy[i].blockingLine), ordered.end());
+					// add blocked lines
+
+					vector<Block> tmpBlock;
+					tmpBlock = blockListCopy; // block list without this blocking line, which will be removed
+					tmpBlock.erase(tmpBlock.begin() + i);
+					for (int j = 0; j < blockListCopy[i].blockedLines.size(); j++){
+						if (!stillBlocked(tmpBlock, blockListCopy[i].blockedLines[j])) // add if its not blocked by some other blocking line
+							//ordered.push_back(blockListCopy[i].blockedLines[j]);
+							ordered.insert(ordered.begin(), blockListCopy[i].blockedLines[j]);
+					}
+					blockListCopy.erase(blockListCopy.begin() + i);
+				}
+			}
+		}
+		else unsetCars.push_back(car);
+	}
+
+// ******************** end *****************************//
 
 	// ********** print lines ***************//
 		//cout << "\n";
