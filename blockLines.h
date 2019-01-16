@@ -75,7 +75,7 @@ bool canCarFit(vector<Block> blocks, vector<Line> lines, Line line, Car car){
 	if (allBlocking.size() != 0){ // if line is blocked
 		for (int i = 0; i < allBlocking.size(); i++){
 			Line bLine = getLine(lines, allBlocking[i]);
-			if (bLine.cars[bLine.cars.size()-1].time < car.time)
+			if (bLine.cars.size() > 0 && bLine.cars[bLine.cars.size()-1].time < car.time)
 				count1++;
 		}
 		if (count1 == allBlocking.size()) return true;
@@ -85,7 +85,7 @@ bool canCarFit(vector<Block> blocks, vector<Line> lines, Line line, Car car){
 		vector<int> allBlocked = getBlockedLines(blocks, line);
 		for (int i = 0; i < allBlocked.size(); i++){
 			Line bLine2 = getLine(lines, allBlocked[i]);
-			if (car.time < bLine2.cars[0].time)
+			if (bLine2.cars.size() > 0 && car.time < bLine2.cars[0].time)
 				count2++;
 		}
 		if (count2 == allBlocked.size()) return true;
