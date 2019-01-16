@@ -15,6 +15,7 @@
 #include "Chromosom.h"
 #include <chrono>
 #include "goal_function.h"
+#include "blockLines.h"
 using namespace std;
 
 int numCars = 0;
@@ -28,10 +29,7 @@ int schedule[100];
 
 
 
-	struct Block {
-		int blockingLine;
-		vector<int> blockedLines;
-	};
+
 	vector<Block> blockList;
 
 	vector<Car> cars;
@@ -66,7 +64,7 @@ int schedule[100];
 		return lls;
 	}
 
-	void printBlockList() {
+/*	void printBlockList() {
 		for (int i = 0; i < blockList.size(); i++) {
 			cout << blockList[i].blockingLine << ' ';
 			for (int j = 0; j < blockList[i].blockedLines.size(); j++) {
@@ -75,15 +73,7 @@ int schedule[100];
 			cout << '\n';
 		}
 	}
-
-	bool stillBlocked(vector<Block> blockl, int index) {
-		for (int i = 0; i < blockl.size(); i++) {
-			for (int j = 0; j < blockl[i].blockedLines.size(); j++) {
-				if (index == blockl[i].blockedLines[j]) return true;
-			}
-		}
-		return false;
-	}
+*/
 
 	void readFromFile() {
 		ifstream file("instanca1.txt");
@@ -459,7 +449,7 @@ int schedule[100];
 		//printCars(unsetCars);
 		//cout << "\n";
 
-		printLinesAll(lines);
+		//printLinesAll(lines);
 		//cout << "\n";
 		//cout << done << "\n";
 
@@ -488,6 +478,7 @@ int schedule[100];
 		auto ga = GeneticAlgorithm(elitism, population_size, mutation_probability);
 		auto c = Chromosom();
 		c.chromosom_representation = lines;
+		c.blockList = blockList;
 		c.evaluation();
 		ga.initialize(c);
 		int cunt = 0;
@@ -495,7 +486,7 @@ int schedule[100];
 		bool condition = false;
 		while (true) {
 			ga.next_gen();
-			//cout << cunt<<"\n";
+			cout << cunt<<"\n";
 			//cout << std::chrono::duration_cast<std::chrono::minutes>(start - std::chrono::high_resolution_clock::now()).count() << "\n";
 			cunt++;
 			if (std::chrono::duration_cast<std::chrono::minutes>(start - std::chrono::high_resolution_clock::now()).count() <= -1 && first == false) {
@@ -504,8 +495,6 @@ int schedule[100];
 				auto best = ga.evaluate();
 				cout << "1min\n";
 				printLinesGoodFormat(best.chromosom_representation);
-				cout << "\n";
-				cout << best.fitness;
 				return 0;
 				///write best to file res-1m-instancenumber
 			}
